@@ -23,10 +23,10 @@ themeToggleBtn.style.cssText = `
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: var(--font-family);
 `;
 document.body.appendChild(themeToggleBtn);
 
-// بررسی حالت ذخیره‌شده در localStorage
 let currentTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', currentTheme);
 updateThemeIcon();
@@ -36,7 +36,6 @@ themeToggleBtn.addEventListener('click', () => {
     document.documentElement.setAttribute('data-theme', currentTheme);
     localStorage.setItem('theme', currentTheme);
     updateThemeIcon();
-    // انیمیشن کوچک
     themeToggleBtn.style.transform = 'scale(0.9)';
     setTimeout(() => {
         themeToggleBtn.style.transform = 'scale(1)';
@@ -44,64 +43,93 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 function updateThemeIcon() {
-    if (currentTheme === 'dark') {
-        themeToggleBtn.innerHTML = '☀️';
-    } else {
-        themeToggleBtn.innerHTML = '🌙';
+    themeToggleBtn.innerHTML = currentTheme === 'dark' ? '☀️' : '🌙';
+}
+
+// ========== سیستم اعلان (Toast) ==========
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    // حذف خودکار بعد از 3 ثانیه
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.remove();
+        }
+    }, 3000);
+}
+
+// ========== مدیریت منوی همبرگری ==========
+function initHamburgerMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const mainNav = document.querySelector('.main-nav');
+    if (hamburger && mainNav) {
+        hamburger.addEventListener('click', () => {
+            mainNav.classList.toggle('open');
+            hamburger.classList.toggle('active');
+        });
+
+        // بستن منو هنگام کلیک روی لینک
+        mainNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('open');
+                hamburger.classList.remove('active');
+            });
+        });
     }
 }
 
-// ========== انیمیشن‌های ورود نرم ==========
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+// ========== انیمیشن‌های ورود عمومی ==========
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    if (animatedElements.length === 0) return;
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
-        }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        observer.observe(el);
     });
-}, observerOptions);
-
-// عناصری که باید انیمیشن بگیرند
-const animatedElements = document.querySelectorAll('.feature-card, .hero h1, .hero p, .hero-actions');
-animatedElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(el);
-});
-
-// ========== افکت‌های اضافی برای کارت‌ها ==========
-document.querySelectorAll('.feature-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.setProperty('--mouse-x', '50%');
-        card.style.setProperty('--mouse-y', '50%');
-    });
-});
+}
 
 // ========== نرم‌کردن اسکرول برای لینک‌های داخلی ==========
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     });
+}
+
+// ========== اجرای توابع اولیه ==========
+document.addEventListener('DOMContentLoaded', () => {
+    initHamburgerMenu();
+    initScrollAnimations();
+    initSmoothScroll();
 });
+
+// ========== در دسترس قرار دادن showToast در سطح سراسری ==========
+window.showToast = showToast;
