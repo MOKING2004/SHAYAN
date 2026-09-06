@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاریخچه تراکنش‌ها | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه تراکنش‌ها -->
+    <style>
+        /* ========== بخش تراکنش‌ها ========== */
+        .transactions-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .transactions-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .transactions-card h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .transactions-card p.subtitle {
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .filter-bar input[type="text"],
+        .filter-bar select {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .filter-bar input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .transactions-table table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 15px 12px;
+            text-align: right;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .transactions-table th {
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            background-color: rgba(212,175,55,0.05);
+        }
+
+        .transactions-table tr:hover td {
+            background-color: rgba(212,175,55,0.05);
+        }
+
+        .tx-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tx-status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .tx-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .tx-status.pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .transactions-card {
+                padding: 20px;
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+            .filter-bar input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html" class="active">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="transactions-section">
+            <div class="container">
+                <div class="transactions-card">
+                    <h1>تاریخچه تراکنش‌ها</h1>
+                    <p class="subtitle">لیست تمام تراکنش‌های حساب شما</p>
+
+                    <!-- نوار فیلتر -->
+                    <div class="filter-bar">
+                        <input type="text" id="search-input" placeholder="جستجو در تراکنش‌ها...">
+                        <select id="filter-type">
+                            <option value="all">همه انواع</option>
+                            <option value="transfer">انتقال وجه</option>
+                            <option value="deposit">واریز</option>
+                            <option value="withdrawal">برداشت</option>
+                            <option value="loan">وام</option>
+                        </select>
+                        <select id="filter-status">
+                            <option value="all">همه وضعیت‌ها</option>
+                            <option value="success">موفق</option>
+                            <option value="pending">در انتظار</option>
+                            <option value="failed">ناموفق</option>
+                        </select>
+                    </div>
+
+                    <!-- جدول تراکنش‌ها -->
+                    <div class="transactions-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>شرح</th>
+                                    <th>مبلغ (تومان)</th>
+                                    <th>نوع</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-body">
+                                <!-- داده‌ها با جاوااسکریپت پر می‌شود -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="no-results" class="no-results">هیچ تراکنشی یافت نشد.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه تراکنش‌ها -->
+    <script>
+        (function() {
+            // داده‌های نمونه تراکنش‌ها
+            const sampleTransactions = [
+                { date: '2025-05-15 10:23', description: 'انتقال به کارت ۶۱۰۴****', amount: -2500000, type: 'transfer', status: 'success' },
+                { date: '2025-05-14 14:05', description: 'واریز حقوق', amount: 15000000, type: 'deposit', status: 'success' },
+                { date: '2025-05-12 09:45', description: 'پرداخت قبض برق', amount: -350000, type: 'withdrawal', status: 'success' },
+                { date: '2025-05-10 22:30', description: 'قسط وام', amount: -1200000, type: 'loan', status: 'pending' },
+                { date: '2025-05-09 11:00', description: 'انتقال از کارت ۵۰۲۱****', amount: 5000000, type: 'deposit', status: 'success' },
+                { date: '2025-05-08 08:15', description: 'خرید آنلاین', amount: -750000, type: 'withdrawal', status: 'failed' },
+                { date: '2025-05-07 16:40', description: 'دریافت وام', amount: 20000000, type: 'loan', status: 'success' },
+                { date: '2025-05-05 19:20', description: 'انتقال به حساب پس‌انداز', amount: -5000000, type: 'transfer', status: 'success' },
+            ];
+
+            const tbody = document.getElementById('transactions-body');
+            const searchInput = document.getElementById('search-input');
+            const filterType = document.getElementById('filter-type');
+            const filterStatus = document.getElementById('filter-status');
+            const noResults = document.getElementById('no-results');
+
+            // تابع نمایش تراکنش‌ها
+            function renderTransactions(filtered) {
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    noResults.style.display = 'block';
+                    return;
+                }
+                noResults.style.display = 'none';
+                tbody.innerHTML = filtered.map(tx => {
+                    let typeLabel = '';
+                    switch(tx.type) {
+                        case 'transfer': typeLabel = 'انتقال وجه'; break;
+                        case 'deposit': typeLabel = 'واریز'; break;
+                        case 'withdrawal': typeLabel = 'برداشت'; break;
+                        case 'loan': typeLabel = 'وام'; break;
+                        default: typeLabel = tx.type;
+                    }
+                    const statusClass = 'tx-status ' + tx.status;
+                    const statusLabel = tx.status === 'success' ? 'موفق' : (tx.status === 'pending' ? 'در انتظار' : 'ناموفق');
+                    const amountClass = tx.amount >= 0 ? 'positive' : 'negative';
+                    return `
+                        <tr>
+                            <td>${tx.date}</td>
+                            <td>${tx.description}</td>
+                            <td style="font-weight:600; ${tx.amount >= 0 ? 'color:#2ecc71;' : 'color:#e74c3c;'}">
+                                ${tx.amount >= 0 ? '+' : ''}${tx.amount.toLocaleString('fa-IR')}
+                            </td>
+                            <td>${typeLabel}</td>
+                            <td><span class="${statusClass}">${statusLabel}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // تابع فیلتر کردن
+            function filterTransactions() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                const selectedType = filterType.value;
+                const selectedStatus = filterStatus.value;
+
+                const filtered = sampleTransactions.filter(tx => {
+                    const matchesSearch = tx.description.toLowerCase().includes(searchTerm) || tx.date.includes(searchTerm);
+                    const matchesType = selectedType === 'all' || tx.type === selectedType;
+                    const matchesStatus = selectedStatus === 'all' || tx.status === selectedStatus;
+                    return matchesSearch && matchesType && matchesStatus;
+                });
+
+                renderTransactions(filtered);
+            }
+
+            // گوش دادن به رویدادها
+            searchInput.addEventListener('input', filterTransactions);
+            filterType.addEventListener('change', filterTransactions);
+            filterStatus.addEventListener('change', filterTransactions);
+
+            // نمایش اولیه
+            renderTransactions(sampleTransactions);
+        })();
+    </script>
+</body>
+</html>
