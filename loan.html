@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دریافت وام | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه وام -->
+    <style>
+        /* ========== بخش وام ========== */
+        .loan-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .loan-layout {
+            display: flex;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .loan-form-card {
+            flex: 1;
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .loan-form-card h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .loan-form-card p.subtitle {
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+            background-color: var(--color-surface);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .interest-rate-box {
+            background: rgba(212,175,55,0.1);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--color-gold);
+            margin-bottom: 25px;
+        }
+        .interest-rate-box span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold-dark);
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: var(--radius-lg);
+        }
+
+        /* پنل محاسبات */
+        .loan-calculation {
+            flex: 1;
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .loan-calculation h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .calc-row:last-child {
+            border-bottom: none;
+        }
+        .calc-row span:first-child {
+            color: var(--color-text-secondary);
+        }
+        .calc-row span:last-child {
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .calc-row.total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--color-gold);
+            font-size: 1.1rem;
+        }
+        .calc-row.total span:last-child {
+            color: var(--color-gold-dark);
+        }
+
+        /* پیام وضعیت */
+        .loan-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        .loan-status.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .loan-status.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 900px) {
+            .loan-layout {
+                flex-direction: column;
+            }
+            .loan-form-card, .loan-calculation {
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html" class="active">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="loan-section">
+            <div class="container">
+                <div class="loan-layout">
+                    <!-- فرم درخواست وام -->
+                    <div class="loan-form-card">
+                        <h2>درخواست وام</h2>
+                        <p class="subtitle">مبلغ و مدت بازپرداخت را مشخص کنید.</p>
+
+                        <div class="interest-rate-box">
+                            <span>نرخ سود: ۱۰٪ ماهیانه</span>
+                        </div>
+
+                        <form id="loan-form" novalidate>
+                            <div class="form-group">
+                                <label for="loan-amount">مبلغ وام (تومان)</label>
+                                <input type="number" id="loan-amount" min="1000000" step="1000000" placeholder="مثلاً 10000000" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="loan-duration">مدت بازپرداخت (ماه)</label>
+                                    <input type="number" id="loan-duration" min="6" max="60" step="1" placeholder="مثلاً 12" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loan-purpose">هدف از وام</label>
+                                    <select id="loan-purpose">
+                                        <option value="personal">وام شخصی</option>
+                                        <option value="business">وام کسب‌وکار</option>
+                                        <option value="housing">وام مسکن</option>
+                                        <option value="education">وام تحصیلی</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="loan-description">توضیحات (اختیاری)</label>
+                                <input type="text" id="loan-description" placeholder="توضیح کوتاه درباره نیاز به وام">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">ثبت درخواست وام</button>
+                        </form>
+
+                        <div id="loan-status" class="loan-status"></div>
+                    </div>
+
+                    <!-- پنل محاسبات -->
+                    <div class="loan-calculation">
+                        <h3>محاسبه اقساط</h3>
+                        <div class="calc-row">
+                            <span>مبلغ وام</span>
+                            <span id="calc-amount">0 تومان</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>مدت بازپرداخت</span>
+                            <span id="calc-duration">0 ماه</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>نرخ سود (ماهیانه)</span>
+                            <span>۱۰٪</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>مبلغ قسط ماهانه</span>
+                            <span id="calc-monthly-payment">0 تومان</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>کل سود</span>
+                            <span id="calc-total-interest">0 تومان</span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>مبلغ کل بازپرداخت</span>
+                            <span id="calc-total-repayment">0 تومان</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه وام -->
+    <script>
+        (function() {
+            const form = document.getElementById('loan-form');
+            const statusDiv = document.getElementById('loan-status');
+            const amountInput = document.getElementById('loan-amount');
+            const durationInput = document.getElementById('loan-duration');
+
+            // عناصر نمایش محاسبات
+            const calcAmount = document.getElementById('calc-amount');
+            const calcDuration = document.getElementById('calc-duration');
+            const calcMonthlyPayment = document.getElementById('calc-monthly-payment');
+            const calcTotalInterest = document.getElementById('calc-total-interest');
+            const calcTotalRepayment = document.getElementById('calc-total-repayment');
+
+            // تابع به‌روزرسانی محاسبات
+            function updateCalculation() {
+                const amount = Number(amountInput.value) || 0;
+                const duration = Number(durationInput.value) || 0;
+                const monthlyInterestRate = 0.1; // ۱۰٪ ماهیانه
+
+                // محاسبه با بهره مرکب (فرمول اقساط ثابت)
+                let monthlyPayment = 0;
+                let totalInterest = 0;
+                let totalRepayment = 0;
+
+                if (amount > 0 && duration > 0) {
+                    // فرمول قسط ثابت: P * r * (1+r)^n / ((1+r)^n - 1)
+                    const r = monthlyInterestRate;
+                    const n = duration;
+                    monthlyPayment = amount * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+                    totalRepayment = monthlyPayment * n;
+                    totalInterest = totalRepayment - amount;
+                }
+
+                calcAmount.textContent = amount.toLocaleString('fa-IR') + ' تومان';
+                calcDuration.textContent = duration.toLocaleString('fa-IR') + ' ماه';
+                calcMonthlyPayment.textContent = monthlyPayment.toLocaleString('fa-IR', { maximumFractionDigits: 0 }) + ' تومان';
+                calcTotalInterest.textContent = totalInterest.toLocaleString('fa-IR', { maximumFractionDigits: 0 }) + ' تومان';
+                calcTotalRepayment.textContent = totalRepayment.toLocaleString('fa-IR', { maximumFractionDigits: 0 }) + ' تومان';
+            }
+
+            // گوش دادن به تغییرات
+            amountInput.addEventListener('input', updateCalculation);
+            durationInput.addEventListener('input', updateCalculation);
+
+            // مقداردهی اولیه
+            updateCalculation();
+
+            // ثبت فرم
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                statusDiv.className = 'loan-status';
+                statusDiv.style.display = 'none';
+
+                const amount = Number(amountInput.value);
+                const duration = Number(durationInput.value);
+
+                if (!amount || amount < 1000000) {
+                    showStatus('حداقل مبلغ وام ۱,۰۰۰,۰۰۰ تومان است.', 'error');
+                    return;
+                }
+                if (!duration || duration < 6 || duration > 60) {
+                    showStatus('مدت بازپرداخت باید بین ۶ تا ۶۰ ماه باشد.', 'error');
+                    return;
+                }
+
+                // شبیه‌سازی موفقیت
+                showStatus(`درخواست وام ${amount.toLocaleString('fa-IR')} تومان با مدت ${duration} ماه ثبت شد.`, 'success');
+                form.reset();
+                updateCalculation();
+            });
+
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'loan-status ' + type;
+                statusDiv.style.display = 'block';
+                statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        })();
+    </script>
+</body>
+</html>
