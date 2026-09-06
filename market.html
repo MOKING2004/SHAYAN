@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خرید و فروش | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه خرید و فروش -->
+    <style>
+        /* ========== بخش خرید و فروش ========== */
+        .market-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .market-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .market-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .market-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .market-header p {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .role-btn.active {
+            border-color: var(--color-gold);
+            background: rgba(212,175,55,0.1);
+            color: var(--color-gold-dark);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .role-btn:hover {
+            border-color: var(--color-gold);
+            transform: translateY(-2px);
+        }
+
+        .market-content {
+            display: none;
+        }
+
+        .market-content.active {
+            display: block;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .market-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg), var(--shadow-gold);
+            border-color: var(--color-gold);
+        }
+
+        .market-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .market-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .market-card p {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .market-card .price {
+            font-weight: 700;
+            color: var(--color-gold-dark);
+            font-size: 1.1rem;
+        }
+
+        .trade-form-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            margin-top: 30px;
+        }
+
+        .trade-form-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.05rem;
+            border-radius: var(--radius-lg);
+            margin-top: 10px;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .market-header h1 {
+                font-size: 2rem;
+            }
+            .role-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                    <li><a href="market.html" class="active">خرید و فروش</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="market-section">
+            <div class="market-container">
+                <div class="market-header">
+                    <h1>بازار خرید و فروش</h1>
+                    <p>با بانکدار یا فروشنده معامله کنید، حساب بخرید یا بفروشید.</p>
+                </div>
+
+                <!-- انتخاب نقش -->
+                <div class="role-selector">
+                    <button class="role-btn active" data-role="buyer">خریدار</button>
+                    <button class="role-btn" data-role="seller">فروشنده</button>
+                    <button class="role-btn" data-role="banker">بانکدار</button>
+                </div>
+
+                <!-- محتوای خریدار -->
+                <div class="market-content active" id="content-buyer">
+                    <div class="market-grid">
+                        <div class="market-card">
+                            <div class="icon">💳</div>
+                            <h3>کارت طلایی</h3>
+                            <p>کارت اعتباری با سقف بالا</p>
+                            <div class="price">۵۰,۰۰۰,۰۰۰ تومان</div>
+                        </div>
+                        <div class="market-card">
+                            <div class="icon">🏢</div>
+                            <h3>حساب بانکی ویژه</h3>
+                            <p>حساب با سود روزشمار</p>
+                            <div class="price">۱۰۰,۰۰۰,۰۰۰ تومان</div>
+                        </div>
+                        <div class="market-card">
+                            <div class="icon">📈</div>
+                            <h3>سهام بانکی</h3>
+                            <p>خرید واحد سهام</p>
+                            <div class="price">از ۱,۰۰۰,۰۰۰ تومان</div>
+                        </div>
+                    </div>
+
+                    <div class="trade-form-card">
+                        <h2>درخواست خرید</h2>
+                        <div class="form-group">
+                            <label>نوع محصول</label>
+                            <select>
+                                <option>کارت طلایی</option>
+                                <option>حساب ویژه</option>
+                                <option>سهام بانکی</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>مبلغ پیشنهادی</label>
+                            <input type="number" placeholder="تومان">
+                        </div>
+                        <button class="btn btn-primary btn-block">ثبت درخواست خرید</button>
+                        <div class="message" id="buyer-message">درخواست شما ثبت شد.</div>
+                    </div>
+                </div>
+
+                <!-- محتوای فروشنده -->
+                <div class="market-content" id="content-seller">
+                    <div class="trade-form-card">
+                        <h2>ثبت کالا برای فروش</h2>
+                        <div class="form-group">
+                            <label>عنوان کالا</label>
+                            <input type="text" placeholder="مثلاً کارت طلایی">
+                        </div>
+                        <div class="form-group">
+                            <label>قیمت</label>
+                            <input type="number" placeholder="تومان">
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <input type="text" placeholder="توضیح کوتاه">
+                        </div>
+                        <button class="btn btn-primary btn-block">ثبت کالا</button>
+                        <div class="message" id="seller-message">کالای شما ثبت شد.</div>
+                    </div>
+                </div>
+
+                <!-- محتوای بانکدار -->
+                <div class="market-content" id="content-banker">
+                    <div class="market-grid">
+                        <div class="market-card">
+                            <div class="icon">🏦</div>
+                            <h3>خدمات بانکی</h3>
+                            <p>مشاوره و ارائه تسهیلات</p>
+                            <div class="price">توافقی</div>
+                        </div>
+                        <div class="market-card">
+                            <div class="icon">💼</div>
+                            <h3>مدیریت دارایی</h3>
+                            <p>سرمایه‌گذاری مطمئن</p>
+                            <div class="price">از ۱۰٪ سود</div>
+                        </div>
+                    </div>
+
+                    <div class="trade-form-card">
+                        <h2>ارائه خدمات</h2>
+                        <div class="form-group">
+                            <label>نوع خدمت</label>
+                            <select>
+                                <option>مشاوره</option>
+                                <option>تسهیلات</option>
+                                <option>سرمایه‌گذاری</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <input type="text" placeholder="شرح خدمت">
+                        </div>
+                        <button class="btn btn-primary btn-block">ثبت خدمت</button>
+                        <div class="message" id="banker-message">خدمت شما ثبت شد.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه خرید و فروش -->
+    <script>
+        (function() {
+            const roleButtons = document.querySelectorAll('.role-btn');
+            const contents = {
+                buyer: document.getElementById('content-buyer'),
+                seller: document.getElementById('content-seller'),
+                banker: document.getElementById('content-banker')
+            };
+
+            function switchRole(role) {
+                // مخفی کردن همه محتواها
+                Object.values(contents).forEach(content => content.classList.remove('active'));
+                // نمایش محتوای انتخاب شده
+                if (contents[role]) {
+                    contents[role].classList.add('active');
+                }
+                // به‌روزرسانی دکمه‌ها
+                roleButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.role === role) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            roleButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchRole(this.dataset.role);
+                });
+            });
+
+            // شبیه‌سازی ثبت فرم‌ها
+            function handleFormSubmit(buttonSelector, messageSelector) {
+                document.querySelector(buttonSelector).addEventListener('click', function() {
+                    const msg = document.querySelector(messageSelector);
+                    msg.style.display = 'block';
+                    setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 3000);
+                });
+            }
+
+            handleFormSubmit('#content-buyer .btn-block', '#buyer-message');
+            handleFormSubmit('#content-seller .btn-block', '#seller-message');
+            handleFormSubmit('#content-banker .btn-block', '#banker-message');
+        })();
+    </script>
+</body>
+</html>
