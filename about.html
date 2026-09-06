@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درباره ما | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه درباره ما -->
+    <style>
+        .about-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+        .about-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+        }
+        .about-card h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            color: var(--color-gold-dark);
+        }
+        .about-card p {
+            color: var(--color-text-secondary);
+            line-height: 2;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        .about-card .highlight {
+            color: var(--color-gold-dark);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="about-section">
+            <div class="container">
+                <div class="about-card">
+                    <h1>درباره بانک من</h1>
+                    <p>
+                        <span class="highlight">بانک من</span> یک پلتفرم بانکداری آنلاین پیشرفته است که با هدف ارائه خدمات مالی مدرن، امن و کاربرپسند طراحی شده است. ما در تلاشیم تا تجربه‌ای لوکس و در عین حال ساده را برای کاربران فراهم کنیم.
+                    </p>
+                    <p>
+                        این پلتفرم شامل امکاناتی مانند انتقال وجه کارت به کارت، سفارش کارت با طرح دلخواه، افتتاح حساب آنلاین، دریافت وام با شرایط شفاف، مشاهده تاریخچه تراکنش‌ها و پنل مدیریت قدرتمند است.
+                    </p>
+                    <p>
+                        طراحی ما بر اساس اصول مدرن و الهام از استانداردهای جهانی، با تمرکز بر حالت دارک و روشن، رنگ‌های طلایی و انیمیشن‌های نرم می‌باشد تا کاربران احساس راحتی و اعتماد کنند.
+                    </p>
+                    <p>
+                        امنیت اطلاعات و شفافیت مالی از اولویت‌های اصلی ماست. ما متعهد به ارائه بهترین خدمات با رعایت کامل قوانین و حریم خصوصی کاربران هستیم.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+</body>
+</html>
