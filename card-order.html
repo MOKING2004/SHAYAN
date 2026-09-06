@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سفارش کارت | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه سفارش کارت -->
+    <style>
+        /* ========== بخش سفارش کارت ========== */
+        .card-order-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .card-order-layout {
+            display: flex;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* فرم انتخاب طرح و رنگ */
+        .card-form {
+            flex: 1;
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .card-form h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .card-form p.subtitle {
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+            background-color: var(--color-surface);
+        }
+
+        .color-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-option.selected {
+            border-color: var(--color-gold);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .design-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .design-option {
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        .design-option.selected {
+            border-color: var(--color-gold);
+            background-color: rgba(212,175,55,0.1);
+            color: var(--color-gold-dark);
+        }
+
+        /* پیش‌نمایش کارت */
+        .card-preview {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .card-3d-container {
+            perspective: 1200px;
+            width: 100%;
+            max-width: 450px;
+            height: 280px;
+        }
+
+        .card-3d-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-3d-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(212,175,55,0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, #1c1c1e, #2c2c2e);
+            color: #f5f5f7;
+            justify-content: space-between;
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #1c1c1e, #2c2c2e);
+            color: #f5f5f7;
+            transform: rotateY(180deg);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(145deg, #d4af37, #f0d77b);
+            border-radius: 6px;
+        }
+
+        .card-number {
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin: 20px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .card-holder label {
+            font-size: 0.7rem;
+            color: #a1a1a6;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .card-holder-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-expiry label {
+            font-size: 0.7rem;
+            color: #a1a1a6;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .card-expiry-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-design-element {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .card-design-element.geometric {
+            background-image: radial-gradient(circle at 30% 40%, #d4af37 0%, transparent 60%),
+                              radial-gradient(circle at 70% 60%, #f0d77b 0%, transparent 60%);
+        }
+
+        .card-design-element.wave {
+            background-image: repeating-linear-gradient(45deg, #d4af37 0px, #d4af37 2px, transparent 2px, transparent 10px);
+        }
+
+        .card-design-element.minimal {
+            background-image: none;
+        }
+
+        .card-magnetic-stripe {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #111;
+        }
+
+        .card-signature {
+            margin-top: 80px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .card-signature-line {
+            width: 200px;
+            height: 25px;
+            background: #fff;
+            border-radius: 3px;
+        }
+
+        .card-cvv {
+            background: #fff;
+            color: #000;
+            padding: 5px 10px;
+            font-weight: 700;
+            border-radius: 4px;
+        }
+
+        .btn-flip {
+            background: var(--color-gold);
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-gold);
+            transition: all var(--transition-base);
+            margin-top: 20px;
+        }
+
+        .btn-flip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212,175,55,0.5);
+        }
+
+        .btn-flip:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 900px) {
+            .card-order-layout {
+                flex-direction: column;
+            }
+            .card-form, .card-preview {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html" class="active">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="card-order-section">
+            <div class="container">
+                <div class="card-order-layout">
+                    <!-- فرم سفارش -->
+                    <div class="card-form">
+                        <h2>سفارش کارت بانکی</h2>
+                        <p class="subtitle">طرح، رنگ و مشخصات کارت خود را انتخاب کنید.</p>
+
+                        <div class="form-group">
+                            <label>طرح کارت</label>
+                            <div class="design-options">
+                                <div class="design-option selected" data-design="geometric">هندسی</div>
+                                <div class="design-option" data-design="wave">موج‌دار</div>
+                                <div class="design-option" data-design="minimal">مینیمال</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>رنگ کارت</label>
+                            <div class="color-options">
+                                <div class="color-option selected" style="background: #1c1c1e;" data-color="#1c1c1e"></div>
+                                <div class="color-option" style="background: #1a1a2e;" data-color="#1a1a2e"></div>
+                                <div class="color-option" style="background: #2d2d2d;" data-color="#2d2d2d"></div>
+                                <div class="color-option" style="background: #0f0f0f;" data-color="#0f0f0f"></div>
+                                <div class="color-option" style="background: #3d3d3d;" data-color="#3d3d3d"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="card-holder-name">نام دارنده کارت</label>
+                            <input type="text" id="card-holder-name" placeholder="مثلاً: علی رضایی" value="علی رضایی">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="card-number-input">شماره کارت (۱۶ رقم)</label>
+                            <input type="text" id="card-number-input" maxlength="16" placeholder="بدون فاصله" value="1234567812345678">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="card-expiry-input">تاریخ انقضا</label>
+                            <input type="text" id="card-expiry-input" placeholder="ماه/سال" value="12/28">
+                        </div>
+
+                        <button id="order-btn" class="btn btn-primary btn-block" style="margin-top:10px;">ثبت سفارش</button>
+                    </div>
+
+                    <!-- پیش‌نمایش کارت -->
+                    <div class="card-preview">
+                        <div class="card-3d-container" id="card-3d-container">
+                            <div class="card-3d-inner" id="card-3d-inner">
+                                <!-- روی کارت -->
+                                <div class="card-face card-front" id="card-front">
+                                    <div class="card-design-element geometric" id="card-design-front"></div>
+                                    <div class="card-top">
+                                        <span class="card-brand">بانک من</span>
+                                        <div class="card-chip"></div>
+                                    </div>
+                                    <div class="card-number" id="preview-card-number">1234 5678 1234 5678</div>
+                                    <div class="card-bottom">
+                                        <div class="card-holder">
+                                            <label>دارنده</label>
+                                            <div class="card-holder-value" id="preview-card-holder">علی رضایی</div>
+                                        </div>
+                                        <div class="card-expiry">
+                                            <label>انقضا</label>
+                                            <div class="card-expiry-value" id="preview-card-expiry">12/28</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- پشت کارت -->
+                                <div class="card-face card-back" id="card-back">
+                                    <div class="card-design-element geometric" id="card-design-back"></div>
+                                    <div class="card-magnetic-stripe"></div>
+                                    <div class="card-signature">
+                                        <div class="card-signature-line"></div>
+                                        <div class="card-cvv">123</div>
+                                    </div>
+                                    <p style="margin-top: auto; font-size: 0.7rem; text-align: center; color: #a1a1a6;">www.bankeman.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-flip" id="flip-btn">چرخش کارت (پشت/رو)</button>
+                        <p style="color: var(--color-text-secondary); font-size: 0.9rem;">با حرکت موس روی کارت، افکت سه‌بعدی ببینید.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه سفارش کارت -->
+    <script>
+        (function() {
+            // ---------- عناصر ----------
+            const cardInner = document.getElementById('card-3d-inner');
+            const cardContainer = document.getElementById('card-3d-container');
+            const flipBtn = document.getElementById('flip-btn');
+            const frontFace = document.getElementById('card-front');
+            const backFace = document.getElementById('card-back');
+            const designOptions = document.querySelectorAll('.design-option');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const holderInput = document.getElementById('card-holder-name');
+            const numberInput = document.getElementById('card-number-input');
+            const expiryInput = document.getElementById('card-expiry-input');
+            const previewNumber = document.getElementById('preview-card-number');
+            const previewHolder = document.getElementById('preview-card-holder');
+            const previewExpiry = document.getElementById('preview-card-expiry');
+            const orderBtn = document.getElementById('order-btn');
+
+            // ---------- متغیرهای حالت ----------
+            let currentDesign = 'geometric';
+            let currentColor = '#1c1c1e';
+            let isFlipped = false;
+
+            // ---------- افکت tilt سه‌بعدی ----------
+            cardContainer.addEventListener('mousemove', function(e) {
+                if (isFlipped) return; // وقتی پشت کارت است، شاید tilt غیرفعال باشد (اختیاری)
+                const rect = cardContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * 8; // حداکثر 8 درجه
+                const rotateY = ((x - centerX) / centerX) * -8;
+                cardInner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            cardContainer.addEventListener('mouseleave', function() {
+                if (!isFlipped) {
+                    cardInner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                }
+            });
+
+            // ---------- چرخش کارت ----------
+            flipBtn.addEventListener('click', function() {
+                isFlipped = !isFlipped;
+                if (isFlipped) {
+                    cardInner.classList.add('flipped');
+                    flipBtn.textContent = 'نمایش روی کارت';
+                    cardInner.style.transform = 'rotateY(180deg)';
+                } else {
+                    cardInner.classList.remove('flipped');
+                    flipBtn.textContent = 'چرخش کارت (پشت/رو)';
+                    cardInner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                }
+            });
+
+            // ---------- انتخاب طرح ----------
+            designOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    designOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentDesign = this.dataset.design;
+                    updateDesign();
+                });
+            });
+
+            function updateDesign() {
+                // حذف کلاس‌های قبلی
+                frontFace.querySelector('.card-design-element').className = 'card-design-element';
+                backFace.querySelector('.card-design-element').className = 'card-design-element';
+                // افزودن کلاس جدید
+                frontFace.querySelector('.card-design-element').classList.add(currentDesign);
+                backFace.querySelector('.card-design-element').classList.add(currentDesign);
+            }
+
+            // ---------- انتخاب رنگ ----------
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentColor = this.dataset.color;
+                    applyColor();
+                });
+            });
+
+            function applyColor() {
+                frontFace.style.background = `linear-gradient(145deg, ${currentColor}, ${adjustColor(currentColor, 20)})`;
+                backFace.style.background = `linear-gradient(145deg, ${currentColor}, ${adjustColor(currentColor, 20)})`;
+            }
+
+            function adjustColor(hex, percent) {
+                // روشن یا تیره کردن رنگ
+                const num = parseInt(hex.replace('#',''), 16);
+                const amt = Math.round(2.55 * percent);
+                const R = (num >> 16) + amt;
+                const G = (num >> 8 & 0x00FF) + amt;
+                const B = (num & 0x0000FF) + amt;
+                return `#${(1 << 24 | R << 16 | G << 8 | B).toString(16).slice(1)}`;
+            }
+
+            // ---------- به‌روزرسانی پیش‌نمایش از ورودی‌ها ----------
+            function updatePreview() {
+                let holder = holderInput.value.trim() || 'نام دارنده';
+                let number = numberInput.value.replace(/\D/g, '').slice(0, 16);
+                let expiry = expiryInput.value.trim() || 'MM/YY';
+
+                // فرمت شماره کارت با فاصله
+                number = number.replace(/(.{4})/g, '$1 ').trim();
+
+                previewHolder.textContent = holder;
+                previewNumber.textContent = number;
+                previewExpiry.textContent = expiry;
+            }
+
+            holderInput.addEventListener('input', updatePreview);
+            numberInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 16);
+                updatePreview();
+            });
+            expiryInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^\d/]/g, '');
+                if (this.value.length === 2 && !this.value.includes('/')) {
+                    this.value += '/';
+                }
+                updatePreview();
+            });
+
+            // ---------- دکمه ثبت سفارش ----------
+            orderBtn.addEventListener('click', function() {
+                alert('سفارش کارت با موفقیت ثبت شد!\n' +
+                      'طرح: ' + currentDesign + '\n' +
+                      'رنگ: ' + currentColor + '\n' +
+                      'نام: ' + (holderInput.value || 'نامشخص') + '\n' +
+                      'شماره: ' + (numberInput.value || 'نامشخص') + '\n' +
+                      'انقضا: ' + (expiryInput.value || 'نامشخص'));
+            });
+
+            // ---------- مقداردهی اولیه ----------
+            updatePreview();
+            applyColor();
+            updateDesign();
+        })();
+    </script>
+</body>
+</html>
