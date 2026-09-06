@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه مدیریت -->
+    <style>
+        /* ========== بخش مدیریت ========== */
+        .admin-section {
+            padding: 40px 0 60px;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .admin-layout {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* نوار کناری */
+        .admin-sidebar {
+            flex: 0 0 250px;
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 25px 15px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .admin-sidebar h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-gold-dark);
+        }
+
+        .admin-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .admin-menu li {
+            margin-bottom: 8px;
+        }
+
+        .admin-menu a {
+            display: block;
+            padding: 12px 15px;
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .admin-menu a:hover {
+            background-color: rgba(212,175,55,0.1);
+            color: var(--color-text);
+        }
+
+        .admin-menu a.active {
+            background: linear-gradient(145deg, var(--color-gold-light), var(--color-gold));
+            color: #1d1d1f;
+            font-weight: 700;
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* محتوای اصلی */
+        .admin-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-panel {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .admin-panel h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .admin-table table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 14px 12px;
+            text-align: right;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .admin-table th {
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            background-color: rgba(212,175,55,0.05);
+        }
+
+        .admin-table tr:hover td {
+            background-color: rgba(212,175,55,0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .status-badge.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm);
+            margin: 2px;
+        }
+
+        /* استایل‌های ریسپانسیو */
+        @media (max-width: 900px) {
+            .admin-layout {
+                flex-direction: column;
+            }
+            .admin-sidebar {
+                position: static;
+                width: 100%;
+            }
+            .admin-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
+            }
+            .admin-menu li {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html" class="active">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <div class="admin-layout">
+                    <!-- نوار کناری -->
+                    <aside class="admin-sidebar">
+                        <h3>مدیریت سیستم</h3>
+                        <ul class="admin-menu">
+                            <li><a class="active" data-section="overview">نمای کلی</a></li>
+                            <li><a data-section="users">کاربران</a></li>
+                            <li><a data-section="accounts">حساب‌ها</a></li>
+                            <li><a data-section="transactions">تراکنش‌ها</a></li>
+                            <li><a data-section="loans">وام‌ها</a></li>
+                            <li><a data-section="cards">کارت‌ها</a></li>
+                        </ul>
+                    </aside>
+
+                    <!-- محتوای اصلی -->
+                    <div class="admin-content">
+                        <!-- نمای کلی -->
+                        <div class="admin-panel" id="panel-overview">
+                            <h2>نمای کلی</h2>
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:20px;">
+                                <div style="background: rgba(212,175,55,0.1); padding:20px; border-radius:var(--radius-md); text-align:center;">
+                                    <h3 style="color:var(--color-gold-dark);">۱۲۳۴</h3>
+                                    <p>کاربران</p>
+                                </div>
+                                <div style="background: rgba(212,175,55,0.1); padding:20px; border-radius:var(--radius-md); text-align:center;">
+                                    <h3 style="color:var(--color-gold-dark);">۵۶۷۸</h3>
+                                    <p>حساب‌های فعال</p>
+                                </div>
+                                <div style="background: rgba(212,175,55,0.1); padding:20px; border-radius:var(--radius-md); text-align:center;">
+                                    <h3 style="color:var(--color-gold-dark);">۹۸۷۶</h3>
+                                    <p>تراکنش‌های امروز</p>
+                                </div>
+                                <div style="background: rgba(212,175,55,0.1); padding:20px; border-radius:var(--radius-md); text-align:center;">
+                                    <h3 style="color:var(--color-gold-dark);">۴۵</h3>
+                                    <p>درخواست‌های وام</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- مدیریت کاربران -->
+                        <div class="admin-panel" id="panel-users" style="display:none;">
+                            <h2>مدیریت کاربران</h2>
+                            <div class="admin-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>نام</th>
+                                            <th>ایمیل</th>
+                                            <th>وضعیت</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>علی رضایی</td>
+                                            <td>ali@example.com</td>
+                                            <td><span class="status-badge success">فعال</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-small">ویرایش</button>
+                                                <button class="btn btn-outline btn-small">مسدود</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>مریم احمدی</td>
+                                            <td>maryam@example.com</td>
+                                            <td><span class="status-badge pending">در انتظار تأیید</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-small">تأیید</button>
+                                                <button class="btn btn-outline btn-small">رد</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- مدیریت حساب‌ها -->
+                        <div class="admin-panel" id="panel-accounts" style="display:none;">
+                            <h2>مدیریت حساب‌ها</h2>
+                            <div class="admin-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>شماره حساب</th>
+                                            <th>مالک</th>
+                                            <th>موجودی</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1234567890</td>
+                                            <td>علی رضایی</td>
+                                            <td>۲۵,۰۰۰,۰۰۰</td>
+                                            <td><span class="status-badge success">فعال</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>0987654321</td>
+                                            <td>مریم احمدی</td>
+                                            <td>۱۲,۵۰۰,۰۰۰</td>
+                                            <td><span class="status-badge pending">در حال بررسی</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- مدیریت تراکنش‌ها -->
+                        <div class="admin-panel" id="panel-transactions" style="display:none;">
+                            <h2>نظارت بر تراکنش‌ها</h2>
+                            <div class="admin-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>مبلغ</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2025-05-15</td>
+                                            <td>-۲,۵۰۰,۰۰۰</td>
+                                            <td><span class="status-badge success">موفق</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2025-05-14</td>
+                                            <td>+۱۵,۰۰۰,۰۰۰</td>
+                                            <td><span class="status-badge success">موفق</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2025-05-12</td>
+                                            <td>-۳۵۰,۰۰۰</td>
+                                            <td><span class="status-badge failed">ناموفق</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- مدیریت وام‌ها -->
+                        <div class="admin-panel" id="panel-loans" style="display:none;">
+                            <h2>درخواست‌های وام</h2>
+                            <div class="admin-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>کاربر</th>
+                                            <th>مبلغ</th>
+                                            <th>مدت</th>
+                                            <th>وضعیت</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>علی رضایی</td>
+                                            <td>۲۰,۰۰۰,۰۰۰</td>
+                                            <td>۱۲ ماه</td>
+                                            <td><span class="status-badge pending">در انتظار</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-small">تأیید</button>
+                                                <button class="btn btn-outline btn-small">رد</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- مدیریت کارت‌ها -->
+                        <div class="admin-panel" id="panel-cards" style="display:none;">
+                            <h2>سفارش‌های کارت</h2>
+                            <div class="admin-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>کاربر</th>
+                                            <th>طرح</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>علی رضایی</td>
+                                            <td>هندسی</td>
+                                            <td><span class="status-badge success">ارسال شد</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>مریم احمدی</td>
+                                            <td>موج‌دار</td>
+                                            <td><span class="status-badge pending">در حال چاپ</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه مدیریت -->
+    <script>
+        (function() {
+            const menuLinks = document.querySelectorAll('.admin-menu a');
+            const panels = {
+                overview: document.getElementById('panel-overview'),
+                users: document.getElementById('panel-users'),
+                accounts: document.getElementById('panel-accounts'),
+                transactions: document.getElementById('panel-transactions'),
+                loans: document.getElementById('panel-loans'),
+                cards: document.getElementById('panel-cards')
+            };
+
+            function switchSection(sectionId) {
+                // مخفی کردن همه پنل‌ها
+                Object.values(panels).forEach(panel => {
+                    if (panel) panel.style.display = 'none';
+                });
+                // نمایش پنل انتخابی
+                if (panels[sectionId]) {
+                    panels[sectionId].style.display = 'block';
+                }
+                // به‌روزرسانی کلاس active
+                menuLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.section === sectionId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+            });
+
+            // نمایش پیش‌فرض نمای کلی
+            switchSection('overview');
+        })();
+    </script>
+</body>
+</html>
