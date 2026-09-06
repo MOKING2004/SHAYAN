@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>افتتاح حساب | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه ثبت‌نام -->
+    <style>
+        /* ========== بخش ثبت‌نام ========== */
+        .register-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+
+        .register-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+            transition: background-color var(--transition-base);
+        }
+
+        .register-card h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .register-card p.subtitle {
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+            background-color: var(--color-surface);
+        }
+
+        .form-group input::placeholder {
+            color: var(--color-text-secondary);
+            opacity: 0.7;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 5px;
+            background: var(--color-border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width var(--transition-base), background-color var(--transition-base);
+        }
+
+        .password-hint {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin-top: 5px;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: var(--radius-lg);
+        }
+
+        .terms {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .terms a {
+            color: var(--color-gold-dark);
+            font-weight: 600;
+        }
+
+        .terms a:hover {
+            color: var(--color-gold);
+        }
+
+        /* پیام وضعیت */
+        .register-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .register-status.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .register-status.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .register-card {
+                padding: 25px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="register-section">
+            <div class="container">
+                <div class="register-card">
+                    <h1>افتتاح حساب</h1>
+                    <p class="subtitle">برای ایجاد حساب بانکی جدید، فرم زیر را تکمیل کنید.</p>
+
+                    <form id="register-form" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">نام</label>
+                                <input type="text" id="first-name" name="firstName" placeholder="نام خود را وارد کنید" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">نام خانوادگی</label>
+                                <input type="text" id="last-name" name="lastName" placeholder="نام خانوادگی" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="national-code">کد ملی</label>
+                            <input type="text" id="national-code" name="nationalCode" maxlength="10" inputmode="numeric" placeholder="۱۰ رقم" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">ایمیل</label>
+                            <input type="email" id="email" name="email" placeholder="example@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">شماره موبایل</label>
+                            <input type="tel" id="phone" name="phone" placeholder="09xxxxxxxxx" maxlength="11" inputmode="tel" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="account-type">نوع حساب</label>
+                            <select id="account-type" name="accountType">
+                                <option value="saving">حساب پس‌انداز</option>
+                                <option value="checking">حساب جاری</option>
+                                <option value="investment">حساب سرمایه‌گذاری</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="password">رمز عبور</label>
+                                <input type="password" id="password" name="password" placeholder="حداقل ۸ کاراکتر" required>
+                                <div class="password-strength">
+                                    <div class="password-strength-bar" id="password-strength-bar"></div>
+                                </div>
+                                <p class="password-hint" id="password-hint">رمز باید شامل حروف و اعداد باشد.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">تکرار رمز عبور</label>
+                                <input type="password" id="confirm-password" name="confirmPassword" placeholder="تکرار رمز عبور" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="terms-check" required style="width: auto;">
+                                <span>قوانین و مقررات را می‌پذیرم.</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">ایجاد حساب</button>
+                    </form>
+
+                    <div id="register-status" class="register-status"></div>
+
+                    <p class="terms">
+                        قبلاً حساب دارید؟ <a href="login.html">وارد شوید</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری (دارک مود و ...) -->
+    <script src="script.js"></script>
+
+    <!-- اسکریپت اختصاصی صفحه ثبت‌نام -->
+    <script>
+        (function() {
+            const form = document.getElementById('register-form');
+            const statusDiv = document.getElementById('register-status');
+            const passwordInput = document.getElementById('password');
+            const strengthBar = document.getElementById('password-strength-bar');
+            const passwordHint = document.getElementById('password-hint');
+            const nationalCodeInput = document.getElementById('national-code');
+            const phoneInput = document.getElementById('phone');
+
+            // اعتبارسنجی کد ملی (الگوریتم ساده)
+            function isValidNationalCode(code) {
+                if (!/^\d{10}$/.test(code)) return false;
+                let sum = 0;
+                for (let i = 0; i < 9; i++) {
+                    sum += parseInt(code.charAt(i), 10) * (10 - i);
+                }
+                let remainder = sum % 11;
+                let checkDigit = parseInt(code.charAt(9), 10);
+                if (remainder < 2) return checkDigit === remainder;
+                return checkDigit === (11 - remainder);
+            }
+
+            // اعتبارسنجی موبایل
+            function isValidPhone(phone) {
+                return /^09\d{9}$/.test(phone);
+            }
+
+            // اعتبارسنجی ایمیل
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            // نمایش قدرت رمز عبور
+            passwordInput.addEventListener('input', function() {
+                const val = this.value;
+                let strength = 0;
+                if (val.length >= 8) strength++;
+                if (/[A-Za-z]/.test(val) && /\d/.test(val)) strength++;
+                if (/[^A-Za-z0-9]/.test(val)) strength++;
+                if (val.length >= 12) strength++;
+
+                const percent = (strength / 4) * 100;
+                strengthBar.style.width = percent + '%';
+                if (strength <= 1) {
+                    strengthBar.style.backgroundColor = '#e74c3c';
+                    passwordHint.textContent = 'رمز ضعیف است.';
+                } else if (strength === 2) {
+                    strengthBar.style.backgroundColor = '#f39c12';
+                    passwordHint.textContent = 'رمز متوسط است.';
+                } else if (strength === 3) {
+                    strengthBar.style.backgroundColor = '#2ecc71';
+                    passwordHint.textContent = 'رمز خوب است.';
+                } else {
+                    strengthBar.style.backgroundColor = '#27ae60';
+                    passwordHint.textContent = 'رمز عالی است.';
+                }
+            });
+
+            // فیلتر ورودی‌های عددی
+            nationalCodeInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            });
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 11);
+            });
+
+            // ثبت فرم
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                statusDiv.className = 'register-status';
+                statusDiv.style.display = 'none';
+
+                const firstName = document.getElementById('first-name').value.trim();
+                const lastName = document.getElementById('last-name').value.trim();
+                const nationalCode = nationalCodeInput.value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = phoneInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                const termsChecked = document.getElementById('terms-check').checked;
+
+                if (!firstName || !lastName) {
+                    showStatus('لطفاً نام و نام خانوادگی را وارد کنید.', 'error');
+                    return;
+                }
+                if (!isValidNationalCode(nationalCode)) {
+                    showStatus('کد ملی معتبر نیست.', 'error');
+                    return;
+                }
+                if (!isValidEmail(email)) {
+                    showStatus('ایمیل معتبر نیست.', 'error');
+                    return;
+                }
+                if (!isValidPhone(phone)) {
+                    showStatus('شماره موبایل معتبر نیست.', 'error');
+                    return;
+                }
+                if (password.length < 8) {
+                    showStatus('رمز عبور باید حداقل ۸ کاراکتر باشد.', 'error');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showStatus('رمز عبور و تکرار آن مطابقت ندارند.', 'error');
+                    return;
+                }
+                if (!termsChecked) {
+                    showStatus('لطفاً قوانین را بپذیرید.', 'error');
+                    return;
+                }
+
+                // شبیه‌سازی موفقیت
+                showStatus('حساب شما با موفقیت ایجاد شد! خوش آمدید.', 'success');
+                form.reset();
+                strengthBar.style.width = '0%';
+                passwordHint.textContent = 'رمز باید شامل حروف و اعداد باشد.';
+            });
+
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'register-status ' + type;
+                statusDiv.style.display = 'block';
+                statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        })();
+    </script>
+</body>
+</html>
