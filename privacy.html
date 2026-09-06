@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حریم خصوصی | بانک من</title>
+    <!-- لینک به استایل سراسری -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- استایل‌های اختصاصی صفحه حریم خصوصی -->
+    <style>
+        .privacy-section {
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+        .privacy-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+        }
+        .privacy-card h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            color: var(--color-gold-dark);
+        }
+        .privacy-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 25px 0 10px;
+            color: var(--color-text);
+        }
+        .privacy-card p {
+            color: var(--color-text-secondary);
+            line-height: 2;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .privacy-card ul {
+            list-style: disc;
+            padding-right: 20px;
+            color: var(--color-text-secondary);
+            line-height: 2;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر مشترک -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">بانک من</a>
+            </div>
+            <nav class="main-nav" aria-label="منوی اصلی">
+                <ul>
+                    <li><a href="dashboard.html">داشبورد</a></li>
+                    <li><a href="transfer.html">انتقال وجه</a></li>
+                    <li><a href="card-order.html">سفارش کارت</a></li>
+                    <li><a href="loan.html">وام</a></li>
+                    <li><a href="transactions.html">تراکنش‌ها</a></li>
+                    <li><a href="admin.html">پنل مدیریت</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="login.html" class="btn btn-outline">ورود</a>
+                <a href="register.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- بخش اصلی -->
+    <main>
+        <section class="privacy-section">
+            <div class="container">
+                <div class="privacy-card">
+                    <h1>حریم خصوصی</h1>
+                    <p>در بانک من، حفظ حریم خصوصی و امنیت اطلاعات شما برای ما بسیار مهم است. این سند توضیح می‌دهد که چه اطلاعاتی جمع‌آوری می‌کنیم، چگونه از آن‌ها استفاده می‌کنیم و چه کنترلی بر داده‌های خود دارید.</p>
+
+                    <h2>۱. اطلاعاتی که جمع‌آوری می‌کنیم</h2>
+                    <ul>
+                        <li>اطلاعات هویتی مانند نام، کد ملی و تاریخ تولد</li>
+                        <li>اطلاعات تماس مانند ایمیل و شماره موبایل</li>
+                        <li>اطلاعات مالی و تراکنش‌ها</li>
+                        <li>اطلاعات فنی مانند آدرس IP و نوع دستگاه</li>
+                    </ul>
+
+                    <h2>۲. نحوه استفاده از اطلاعات</h2>
+                    <p>اطلاعات شما برای ارائه خدمات بانکی، احراز هویت، جلوگیری از تقلب، ارسال اطلاعیه‌ها و بهبود تجربه کاربری استفاده می‌شود. ما هرگز اطلاعات شخصی شما را بدون رضایت صریح به اشخاص ثالث نمی‌فروشیم.</p>
+
+                    <h2>۳. امنیت اطلاعات</h2>
+                    <p>ما از استانداردهای پیشرفته رمزنگاری و پروتکل‌های امنیتی برای محافظت از داده‌های شما استفاده می‌کنیم. دسترسی به اطلاعات فقط برای کارکنان مجاز و در حد نیاز انجام می‌شود.</p>
+
+                    <h2>۴. کنترل کاربر بر داده‌ها</h2>
+                    <p>شما می‌توانید در هر زمان اطلاعات شخصی خود را مشاهده، ویرایش یا درخواست حذف کنید. برای این کار از طریق صفحه تماس با ما اقدام نمایید.</p>
+
+                    <h2>۵. تغییرات در سیاست حریم خصوصی</h2>
+                    <p>در صورت تغییر این سند، نسخه به‌روزرسانی‌شده در همین صفحه منتشر می‌شود و در صورت نیاز به شما اطلاع‌رسانی می‌گردد.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر مشترک -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 بانک من. تمامی حقوق محفوظ است.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">درباره ما</a></li>
+                    <li><a href="contact.html">تماس با ما</a></li>
+                    <li><a href="privacy.html">حریم خصوصی</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- اسکریپت سراسری -->
+    <script src="script.js"></script>
+</body>
+</html>
